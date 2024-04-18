@@ -29,6 +29,7 @@ jobs:
                 echo "Unsupported branch."
                 exit 1
               fi
+              echo $REGION
               
           - name: configure aws credentials
             uses: aws-actions/configure-aws-credentials@v4
