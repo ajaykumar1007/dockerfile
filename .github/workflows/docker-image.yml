@@ -16,13 +16,25 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-          - uses: actions/checkout@v4
+          - name: Check out repository
+            uses: actions/checkout@v4
 
+          - name: Set variable based on branch
+            run: |
+              if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+                REGION="us-west-1"
+              elif [[ "${{ github.ref }}" == "refs/heads/test" ]]; then
+                REGION="us-west-2"
+              else
+                echo "Unsupported branch."
+                exit 1
+              fi
+              
           - name: configure aws credentials
             uses: aws-actions/configure-aws-credentials@v4
             with:
               role-to-assume: ${{ secrets.ROLE }}
-              aws-region: ${{ secrets.REGION }}
+              aws-region: ${{ env.REGION }}
     
           - name: Login to Amazon ECR
             id: login-ecr
@@ -35,5 +47,5 @@ jobs:
               IMAGE_TAG: ${{ github.sha  }}
             run: |
               SHORT_SHA=$(echo "${IMAGE_TAG}" | cut -c1-7)
-              docker build -t $REGISTRY/$REPOSITORY:$SHORT_SHA .
+              docker build --no-cache -t $REGISTRY/$REPOSITORY:$SHORT_SHA .
               docker push $REGISTRY/$REPOSITORY:$SHORT_SHA
