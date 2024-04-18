@@ -16,13 +16,13 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-          - uses: actions/checkout@v3 
+          - uses: actions/checkout@v4
+
           - name: configure aws credentials
             uses: aws-actions/configure-aws-credentials@v4
             with:
-              role-to-assume: arn:aws:iam::510837106682:role/github-ecr-role
-              # role-session-name: samplerolesession
-              aws-region: 'us-west-1'
+              role-to-assume: ${{ secrets.ROLE }}
+              aws-region: ${{ secrets.REGION }}
     
           - name: Login to Amazon ECR
             id: login-ecr
@@ -32,7 +32,7 @@ jobs:
             env:
               REGISTRY: ${{ steps.login-ecr.outputs.registry }}
               REPOSITORY: ${{ secrets.REPOSITORY }}
-              IMAGE_TAG: $(calculatedSha=$(git rev-parse --short ${{ github.sha }}))
+              IMAGE_TAG: ${{ github.sha:0:7  }}
             run: |
               ls -la
               docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
