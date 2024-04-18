@@ -1,29 +1,19 @@
-# Use an official Node.js runtime as the base image
-FROM node:14-alpine
-
-# Set the working directory inside the container
+FROM node:18 AS builder
+# Set working directory
 WORKDIR /app
-
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
-
-# Install the project dependencies
-RUN npm install
-
-# Copy the rest of the application code to the working director
+# Copy all files from current directory to working dir in image
 COPY . .
-
-# Build the React app for production
-RUN npm run build
-
-# Use the official Nginx image as the base image for serving the React app
+# install node modules
+RUN npm install
+# build assets
+RUN npm build
+# nginx state for serving content
 FROM nginx:alpine
-
-# Copy the built React app from the previous stage to the Nginx webroot directory
-COPY --from=0 /app/build /usr/share/nginx/html
-
-# Expose port 80 to make the app accessible from the host
-EXPOSE 80
-
-# Start Nginx when the container starts
-CMD ["nginx", "-g", "daemon off;"]
+# Set working directory to nginx asset directory
+WORKDIR /usr/share/nginx/html
+# Remove default nginx static assets
+RUN rm -rf ./*
+# Copy static assets from builder stage
+COPY --from=builder /app/build .
+# Containers run nginx with global directives and daemon off
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
