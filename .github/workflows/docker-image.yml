@@ -22,20 +22,19 @@ jobs:
           - name: Set variable based on branch
             run: |
               if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-                REGION="us-west-1"
+              echo "REGION=us-west-1" >> $GITHUB_ENV
               elif [[ "${{ github.ref }}" == "refs/heads/test" ]]; then
-                REGION="us-west-2"
+              echo "REGION=us-west-1" >> $GITHUB_ENV
               else
                 echo "Unsupported branch."
                 exit 1
               fi
-              echo $REGION
               
           - name: configure aws credentials
             uses: aws-actions/configure-aws-credentials@v4
             with:
               role-to-assume: ${{ secrets.ROLE }}
-              aws-region: ${REGION}
+              aws-region: ${{ env.REGION }}
     
           - name: Login to Amazon ECR
             id: login-ecr
