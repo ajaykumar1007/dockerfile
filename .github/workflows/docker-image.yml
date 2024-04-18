@@ -34,7 +34,6 @@ jobs:
               REPOSITORY: ${{ secrets.REPOSITORY }}
               IMAGE_TAG: ${{ github.sha  }}
             run: |
-              ls -la
-              env
-              docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-              docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+              SHORT_SHA=$(echo "${IMAGE_TAG}" | cut -c1-7)
+              docker build -t $REGISTRY/$REPOSITORY:$SHORT_SHA .
+              docker push $REGISTRY/$REPOSITORY:$SHORT_SHA
