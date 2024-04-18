@@ -49,3 +49,9 @@ jobs:
               SHORT_SHA=$(echo "${IMAGE_TAG}" | cut -c1-7)
               docker build --no-cache -t $REGISTRY/$REPOSITORY:$SHORT_SHA .
               docker push $REGISTRY/$REPOSITORY:$SHORT_SHA
+              
+          - name: Send GitHub Action trigger data to Slack workflow
+            id: slack
+            uses: slackapi/slack-github-action@v1.25.0
+            env:
+              SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
