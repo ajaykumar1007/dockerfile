@@ -32,7 +32,7 @@ jobs:
             env:
               REGISTRY: ${{ steps.login-ecr.outputs.registry }}
               REPOSITORY: ${{ secrets.REPOSITORY }}
-              IMAGE_TAG: ${{ github.sha }}
+              IMAGE_TAG: $(calculatedSha=$(git rev-parse --short ${{ github.sha }}))
             run: |
               ls -la
               docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
