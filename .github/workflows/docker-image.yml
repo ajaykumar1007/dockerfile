@@ -16,17 +16,13 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-          -  uses: actions/checkout@v3
-          - name: test
-            run: |
-              ls -la
-  
+          - uses: actions/checkout@v3 
           - name: configure aws credentials
             uses: aws-actions/configure-aws-credentials@v4
             with:
               role-to-assume: arn:aws:iam::510837106682:role/github-ecr-role
               # role-session-name: samplerolesession
-              aws-region: 'us-east-1'
+              aws-region: 'us-west-1'
     
           - name: Login to Amazon ECR
             id: login-ecr
@@ -41,10 +37,3 @@ jobs:
               ls -la
               docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
               docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
-    
-          # - name: App Build and Push
-          #   uses: docker/build-push-action@v5
-          #   with:
-          #     file: ./docker-app-action
-          #     push: true
-          #     tags: 510837106682.dkr.ecr.us-east-1.amazonaws.com/test
