@@ -6,7 +6,7 @@ COPY . .
 # install node modules
 RUN npm install
 # build assets
-RUN npm build
+RUN npm run build
 # nginx state for serving content
 FROM nginx:alpine
 # Set working directory to nginx asset directory
