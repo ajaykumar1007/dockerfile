@@ -11,8 +11,20 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --no-cache --file Dockerfile --tag my-image-name:$(date +%s)
+          - name: configure aws credentials
+            uses: aws-actions/configure-aws-credentials@v2
+            with:
+              role-to-assume: arn:aws:iam::510837106682:role/github-ecr-role
+              aws-region: 'us-east-1'
+    
+          - name: Login to Amazon ECR
+            id: login-ecr
+            uses: aws-actions/amazon-ecr-login@v1
+    
+          - name: App Build and Push
+            uses: docker/build-push-action@v4
+            with:
+              file: ./docker-app-action
+              push: true
+              tags: 510837106682.dkr.ecr.us-east-1.amazonaws.com/test
