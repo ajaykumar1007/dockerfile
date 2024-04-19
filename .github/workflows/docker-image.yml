@@ -46,9 +46,9 @@ jobs:
               REPOSITORY: ${{ secrets.REPOSITORY }}
               IMAGE_TAG: ${{ github.sha  }}
             run: |
-              SHORT_SHA=$(echo "${IMAGE_TAG}" | cut -c1-7)
+              # SHORT_SHA=$(echo "${IMAGE_TAG}" | cut -c1-7)
               docker build --no-cache -t $REGISTRY/$REPOSITORY:$SHORT_SHA .
-              docker push $REGISTRY/$REPOSITORY:$SHORT_SHAa
+              docker push $REGISTRY/$REPOSITORY:$SHORT_SHA
 
           - uses: 8398a7/action-slack@v3
             with:
