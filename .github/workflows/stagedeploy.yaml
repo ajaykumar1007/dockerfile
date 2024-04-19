@@ -15,7 +15,7 @@ jobs:
     uses: ./.github/workflows/docker-image.yml
     with:
       REPOSITORY: test
-      AWS_REGION: us-west-1
+      AWS_REGION: us-east-2
       ARGOCD_BRANCH: 'stage'
       PATH: 'stage'
     secrets:
