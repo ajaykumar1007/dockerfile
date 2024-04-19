@@ -34,7 +34,7 @@ permissions:
 jobs:
   deploy-peermarket-web:
     runs-on: ubuntu-latest
-    permissions: write-all
+    # permissions: write-all
     steps:
           - name: Check out repository
             uses: actions/checkout@v4
