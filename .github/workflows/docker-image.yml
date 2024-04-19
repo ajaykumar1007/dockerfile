@@ -29,7 +29,7 @@ on:
       
 permissions:
   id-token: read   # This is required for requesting the JWT
-  # contents: read    # This is required for actions/checkout
+  contents: read    # This is required for actions/checkout
 
 jobs:
   deploy-peermarket-web:
@@ -42,6 +42,7 @@ jobs:
           - name: configure aws credentials
             uses: aws-actions/configure-aws-credentials@v4
             with:
+              audience: sts.amazonaws.com.cn
               role-to-assume: ${{ secrets.ROLE }}
               aws-region: ${{ inputs.AWS_REGION }}
     
