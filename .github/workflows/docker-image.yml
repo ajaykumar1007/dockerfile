@@ -61,6 +61,7 @@ jobs:
               git config user.name github-actions
               git config user.email github-actions@github.com 
               cd stage
+              ls -la 
               image_url=$(sed -n 's/.*\(image:\)/\1/p' nginx.yaml|cut -d' ' -f2)
               sed  -i s+${image_url}+${REGISTRY/$REPOSITORY:$SHORT_SHA+g nginx.yaml
               git add .
