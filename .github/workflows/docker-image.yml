@@ -55,6 +55,10 @@ jobs:
               repository: 'ajaykumar1007/argocd'
               ref: 'stage'
               token: ${{ secrets.TOKO }}
+            env:
+              REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+              REPOSITORY: ${{ secrets.REPOSITORY }}
+              IMAGE_TAG: ${{ github.sha  }}  
           - run: |
               echo $REGISTRY ***** $REPOSITORY ***** $SHORT_SHA
               ls -l 
