@@ -34,7 +34,6 @@ permissions:
 jobs:
   deploy-peermarket-web:
     runs-on: ubuntu-latest
-    permissions: write-all
     # permissions: write-all
     steps:
           - name: Check out repository
@@ -43,7 +42,6 @@ jobs:
           - name: configure aws credentials
             uses: aws-actions/configure-aws-credentials@v4
             with:
-              audience: sts.amazonaws.com.cn
               role-to-assume: ${{ secrets.ROLE }}
               aws-region: ${{ inputs.AWS_REGION }}
     
