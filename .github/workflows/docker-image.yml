@@ -1,4 +1,4 @@
-name: Docker Image CI PRO
+name: Docker Image CI prod
 
 on:
   workflow_call:
@@ -29,9 +29,9 @@ permissions:
 
 jobs:
 
-  build:
-
+  deploy peermarket web:
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
           - name: Check out repository
             uses: actions/checkout@v4
