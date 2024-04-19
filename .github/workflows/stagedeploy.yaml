@@ -1,0 +1,19 @@
+name: '[uat] Deploy Peermarket web app'
+
+# As the UAT and production deployments are handled by codepipeline, this workflow is not used
+on: workflow_dispatch # Allows manual triggering of workflow
+#   push:
+#     branches: 
+#       - v1-stable
+
+jobs:
+  uat_deploy_peermarket:
+    uses: ./.github/workflows/docker-image.yml
+    with:
+      REPOSITORY: test
+      AWS_REGION: us-west-1
+      ARGOCD_BRANCH: 'stage'
+      PATH: 'stage'
+    secrets:
+      ROLE: ${{ secrets.ROLE }}
+      TOKO: ${{ secrets.TOKO }}
