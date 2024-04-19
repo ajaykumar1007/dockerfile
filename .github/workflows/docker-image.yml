@@ -63,7 +63,7 @@ jobs:
               cd stage
               ls -la 
               image_url=$(sed -n 's/.*\(image:\)/\1/p' nginx.yaml|cut -d' ' -f2)
-              sed  -i s+${image_url}+${REGISTRY/$REPOSITORY:$SHORT_SHA+g nginx.yaml
+              sed  -i s+${image_url}+${REGISTRY}/${REPOSITORY}:${SHORT_SHA}+g nginx.yaml
               git add .
               git commit -m "generated"
               git push
