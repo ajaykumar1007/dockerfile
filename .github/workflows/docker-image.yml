@@ -49,8 +49,9 @@ jobs:
               SHORT_SHA=$(echo "${IMAGE_TAG}" | cut -c1-7)
               # docker build --no-cache -t $REGISTRY/$REPOSITORY:$SHORT_SHA .
               # docker push $REGISTRY/$REPOSITORY:$SHORT_SHA
-              echo "$REGISTRY ***** $REPOSITORY ***** $SHORT_SHA"
-
+              echo "REGISTRY=$REGISTRY" >> $GITHUB_ENV
+              echo "REPOSITORY=$REPOSITORY" >> $GITHUB_ENV
+              echo "IMAGE_TAG=$SHORT_SHA" >> $GITHUB_ENV
 
           - uses: actions/checkout@v4
             with:
@@ -61,14 +62,14 @@ jobs:
               REGISTRY: ${{ steps.login-ecr.outputs.registry }}
               REPOSITORY: ${{ secrets.REPOSITORY }}
           - run: |
-              echo "$REGISTRY ***** $REPOSITORY ***** $SHORT_SHA"
+              echo "$REGISTRY ***** $REPOSITORY ***** $IMAGE_TAG"
               ls -l 
               git config user.name github-actions
               git config user.email github-actions@github.com 
               cd stage
               ls -la 
               image_url=$(sed -n 's/.*\(image:\)/\1/p' nginx.yaml|cut -d' ' -f2)
-              sed  -i s+${image_url}+$REGISTRY/$REPOSITORY:$SHORT_SHA+g nginx.yaml
+              sed  -i s+${image_url}+$REGISTRY/$REPOSITORY:$IMAGE_TAG+g nginx.yaml
               git add .
               git commit -m "generated"
               git push
