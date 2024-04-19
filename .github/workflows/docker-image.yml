@@ -54,7 +54,7 @@ jobs:
             with:
               repository: ajaykumar1007/d
               ref: 'main'
-              # token: ''
+              token: ${{ secrets.TOKO }}
           - run: |
               ls -l 
               date > generated.txt
