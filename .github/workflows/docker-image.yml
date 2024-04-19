@@ -55,7 +55,7 @@ jobs:
               docker push $REGISTRY/$REPOSITORY:$SHORT_SHA
               echo "REGISTRY=$REGISTRY" >> $GITHUB_ENV
               echo "REPOSITORY=$REPOSITORY" >> $GITHUB_ENV
-              echo "IMAGE_TAG=$SHORT_SHA" >> $GITHUB_ENV
+              echo "IMAGE_TAG=$SHORT_SHA" >> $GITHUB_ENV 
 
           - uses: actions/checkout@v4
             with:
