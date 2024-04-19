@@ -58,8 +58,8 @@ jobs:
           - run: |
               ls -l 
               date > generated.txt
-              git config user.name github-actions
-              git config user.email github-actions@github.com
+              git config user.name ajaykumar1007
+              git config user.email ajay.kumar3@antiersolutions.com
               git add .
               git commit -m "generated"
               git push
