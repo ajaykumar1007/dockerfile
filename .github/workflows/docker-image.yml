@@ -66,8 +66,8 @@ jobs:
           - name: "Update image tag in argocd repository"
             uses: actions/checkout@v4
             with:
-              repository: ajaykumar1007/argocd@stage
-              # ref: ${{ inputs.ARGOCD_BRANCH }}
+              repository: ajaykumar1007/argocd
+              ref: ${{ inputs.ARGOCD_BRANCH }}
               ssh-key: ${{ secrets.SS }}
             env:
               REGISTRY: ${{ steps.login-ecr.outputs.registry }}
