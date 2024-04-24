@@ -18,7 +18,7 @@ on:
       ROLE:
         description: 'AWS role for pushing images to an ECR registry'
         required: true
-      GIT_SSH_KEY:
+      ssh-key:
         description: 'GitHub Actions use a SSH key for cloning the ArgoCD repository.'
         required: true
       
@@ -68,8 +68,8 @@ jobs:
             with:
               repository: ajaykumar1007/argocd
               ref: ${{ inputs.ARGOCD_BRANCH }}
-              token: ${{ secrets.SS }} 
-              # ssh-key: ${{ secrets.SS }} 
+              # token: ${{ secrets.SS }} 
+              ssh-key: ${{ secrets.SS }} 
             env:
               REGISTRY: ${{ steps.login-ecr.outputs.registry }}
               ECR_REPOSITORY: ${{ inputs.ECR_REPOSITORY }}
