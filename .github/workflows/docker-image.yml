@@ -1,10 +1,9 @@
-name: Docker Image CI prod
-
+name: Peer market K8s
 on:
   workflow_call:
     inputs:
-      REPOSITORY:
-        description: 'repository name'
+      ECR_REPOSITORY:
+        description: 'The Amazon ECR repository name used for pushing images to the UAT or production ECR'
         required: true
         type: string
       AWS_REGION:
@@ -12,19 +11,15 @@ on:
         required: true
         type: string
       ARGOCD_BRANCH:
-        description: 'argocd branch'
-        required: true
-        type: string
-      PATH:
-        description: "argocd path"
+        description: 'ArgoCD branch for cloning based on environment (uat or prod)'
         required: true
         type: string
     secrets:
       ROLE:
-        description: 'AWS role for images push on ecr registry'
+        description: 'AWS role for pushing images to an ECR registry'
         required: true
-      TOKO:
-        description: 'token for github actions'
+      GIT_SSH_KEY:
+        description: 'GitHub Actions use a SSH key for cloning the ArgoCD repository.'
         required: true
       
 permissions:
@@ -55,14 +50,14 @@ jobs:
           - name: Build, tag, and push docker image to Amazon ECR
             env:
               REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-              REPOSITORY: ${{ inputs.REPOSITORY }}
+              ECR_REPOSITORY: ${{ inputs.ECR_REPOSITORY }}
               IMAGE_TAG: ${{ github.sha  }}
             run: |
               SHORT_SHA=$(echo "${IMAGE_TAG}" | cut -c1-7)
-              docker build --no-cache -t $REGISTRY/$REPOSITORY:$SHORT_SHA .
-              docker push $REGISTRY/$REPOSITORY:$SHORT_SHA  
+              docker build --no-cache -t $REGISTRY/$ECR_REPOSITORY:$SHORT_SHA .
+              docker push $REGISTRY/$ECR_REPOSITORY:$SHORT_SHA  
               echo "REGISTRY=$REGISTRY" >> $GITHUB_ENV
-              echo "REPOSITORY=$REPOSITORY" >> $GITHUB_ENV
+              echo "ECR_REPOSITORY=$ECR_REPOSITORY" >> $GITHUB_ENV
               echo "IMAGE_TAG=$SHORT_SHA" >> $GITHUB_ENV
 
 ################         
@@ -73,16 +68,16 @@ jobs:
             with:
               repository: 'ajaykumar1007/argocd'
               ref: ${{ inputs.ARGOCD_BRANCH }}
-              token: ${{ secrets.TOKO }}
+              ssh-key: ${{ secrets.SS }}
             env:
               REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-              REPOSITORY: ${{ inputs.REPOSITORY }}
+              ECR_REPOSITORY: ${{ inputs.ECR_REPOSITORY }}
           - run: |
               git config user.name github-actions
               git config user.email github-actions@github.com 
-              cd ${{ inputs.PATH }}
-              image_url=$(sed -n 's/.*\(image:\)/\1/p' nginx.yaml|cut -d' ' -f2)
-              sed  -i s+${image_url}+$REGISTRY/$REPOSITORY:$IMAGE_TAG+g nginx.yaml
+              cd stage
+              image_url=$(sed -n 's/.*\(image:\)/\1/p' deployment.yaml|cut -d' ' -f2)
+              sed  -i s+${image_url}+$REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG+g deployment.yaml
               git add .
               git commit -m "image update"
               git push origin 
