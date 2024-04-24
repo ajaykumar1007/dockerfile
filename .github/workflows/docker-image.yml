@@ -19,7 +19,7 @@ jobs:
           - name: Check out repository
             uses: actions/checkout@v4
 
-          - name: Set variable based on branch
+          - name: Set variable based on branch 
             run: |
               if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
               echo "REGION=us-west-1" >> $GITHUB_ENV
