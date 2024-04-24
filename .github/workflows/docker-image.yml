@@ -18,7 +18,7 @@ on:
       ROLE:
         description: 'AWS role for pushing images to an ECR registry'
         required: true
-      ssh-key:
+      GIT_SSH_KEY:
         description: 'GitHub Actions use a SSH key for cloning the ArgoCD repository.'
         required: true
       
@@ -69,7 +69,7 @@ jobs:
               repository: ajaykumar1007/argocd
               ref: ${{ inputs.ARGOCD_BRANCH }}
               # token: ${{ secrets.SS }} 
-              ssh-key: ${{ secrets.ssh-key }} 
+              ssh-key: ${{ secrets.GIT_SSH_KEY }} 
             env:
               REGISTRY: ${{ steps.login-ecr.outputs.registry }}
               ECR_REPOSITORY: ${{ inputs.ECR_REPOSITORY }}
@@ -77,8 +77,8 @@ jobs:
               git config user.name github-actions
               git config user.email github-actions@github.com 
               cd stage
-              image_url=$(sed -n 's/.*\(image:\)/\1/p' deployment.yaml|cut -d' ' -f2)
-              sed  -i s+${image_url}+$REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG+g deployment.yaml
+              image_url=$(sed -n 's/.*\(image:\)/\1/p' nginx.yaml|cut -d' ' -f2)
+              sed  -i s+${image_url}+$REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG+g nginx.yaml
               git add .
               git commit -m "image update"
               git push origin 
