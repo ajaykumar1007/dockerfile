@@ -22,7 +22,7 @@ jobs:
           - name: Set variable based on branch 
             run: |
               if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-              echo "REGION=us-west-1" >> $GITHUB_ENV
+              echo "REGION=us-east-2" >> $GITHUB_ENV
               echo "REPOSITORY=test" >> $GITHUB_ENV
               echo "ARGOCD_BRANCH=stage" >> $GITHUB_ENV
               elif [[ "${{ github.ref }}" == "refs/heads/test" ]]; then
