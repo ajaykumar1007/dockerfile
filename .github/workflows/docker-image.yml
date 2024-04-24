@@ -68,7 +68,7 @@ jobs:
             with:
               repository: ajaykumar1007/argocd
               ref: ${{ inputs.ARGOCD_BRANCH }}
-              ssh-key: ${{ secrets.SS }}
+              ssh-key: ${{ secrets.SS }} 
             env:
               REGISTRY: ${{ steps.login-ecr.outputs.registry }}
               ECR_REPOSITORY: ${{ inputs.ECR_REPOSITORY }}
