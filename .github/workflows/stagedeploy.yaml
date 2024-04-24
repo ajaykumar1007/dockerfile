@@ -20,4 +20,4 @@ jobs:
       # PATH: 'stage'
     secrets:
       ROLE: ${{ secrets.ROLE }}
-      TOKO: ${{ secrets.TOKO }}
+      TOKO: ${{ secrets.SS }}
