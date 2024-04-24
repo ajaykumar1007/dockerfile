@@ -20,4 +20,4 @@ jobs:
       # PATH: 'stage'
     secrets:
       ROLE: ${{ secrets.ROLE }}
-      GIT_SSH_KEY: ${{ secrets.TOKO }}
+      ssh-key: ${{ secrets.SS }}
