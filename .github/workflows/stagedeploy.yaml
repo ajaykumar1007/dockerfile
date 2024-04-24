@@ -14,7 +14,7 @@ jobs:
   uat_deploy_peermarket:
     uses: ./.github/workflows/docker-image.yml
     with:
-      REPOSITORY: test121
+      ECR_REPOSITORY: test121
       AWS_REGION: us-east-2
       ARGOCD_BRANCH: 'stage'
       PATH: 'stage'
