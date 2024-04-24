@@ -17,7 +17,7 @@ jobs:
       ECR_REPOSITORY: test121
       AWS_REGION: us-east-2
       ARGOCD_BRANCH: 'stage'
-      PATH: 'stage'
+      # PATH: 'stage'
     secrets:
       ROLE: ${{ secrets.ROLE }}
       TOKO: ${{ secrets.TOKO }}
