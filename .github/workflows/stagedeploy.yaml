@@ -5,7 +5,7 @@
 name: '[uat] Deploy Peermarket web app'
 
 # As the UAT and production deployments are handled by codepipeline, this workflow is not used
-on: workflow_dispatch # Allows manual triggering of workflow
+on:  # Allows manual triggering of workflow
   push:
     branches: 
       - stage
