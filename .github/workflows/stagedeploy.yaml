@@ -7,7 +7,7 @@ name: '[uat] Deploy Peermarket web app'
 #   push:
 #     branches: 
 #       - v1-stable
-on:
+on: workflow_dispatch
   push:
     branches: 
       - stage
