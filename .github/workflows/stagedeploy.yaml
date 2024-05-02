@@ -12,7 +12,7 @@ on:  # Allows manual triggering of workflow
 
 jobs:
   uat_deploy_peermarket:
-    uses: ./.github/workflows/_deploy_peermarket_k8.yml
+    uses: ./.github/workflows/docker-image.yml
     with:
       ECR_REPOSITORY: pre-prod-peermarket-web-v1-stable
       ARGOCD_BRANCH: uat
