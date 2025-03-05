@@ -28,16 +28,18 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     needs: build-and-push
-    if: always()  # Runs notification step even if jobs fail
+    if: always()  # Runs this step even if previous jobs fail
     steps:
       - name: Send Notification to Google Chat
         run: |
           STATUS="${{ job.status }}"
-          MESSAGE="🔔 GitHub Actions Pipeline Status: *$STATUS* 🚀\n
-          - Repository: *${{ github.repository }}*\n
-          - Branch: *${{ github.ref }}*\n
-          - Commit: *${{ github.sha }}*\n
-          - Triggered by: *${{ github.actor }}*\n
+          MESSAGE="🔔 *GitHub Actions Pipeline Status:* *$STATUS* 🚀\n
+          - *Repository:* ${{ github.repository }}\n
+          - *Branch:* ${{ github.ref }}\n
+          - *Commit:* ${{ github.sha }}\n
+          - *Triggered by:* ${{ github.actor }}\n
           - [View Workflow Logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+
           JSON_PAYLOAD=$(jq -n --arg text "$MESSAGE" '{text: $text}')
-          curl -X POST -H "Content-Type: application/json" -d "$JSON_PAYLOAD" https://chat.googleapis.com/v1/spaces/AAAAUFIqj4g/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=LEUosVfEE-U9a0qEsVUcIHEkLGqxpn0A6gKG9F_Iyj8
+          
+          curl -X POST -H "Content-Type: application/json" -d "$JSON_PAYLOAD" "https://chat.googleapis.com/v1/spaces/AAAAUFIqj4g/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=LEUosVfEE-U9a0qEsVUcIHEkLGqxpn0A6gKG9F_Iyj8"
