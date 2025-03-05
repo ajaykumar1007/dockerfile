@@ -23,4 +23,21 @@ jobs:
         run: echo "IMAGE_TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Use IMAGE_TAG
-        run: echo "Image tag is $IMAGE_TAG"
+        run: echo "Image tag is $IMAGE_TAG"jjj  && exit 1
+            
+  notify:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: always()  # Runs notification step even if jobs fail
+    steps:
+      - name: Send Notification to Google Chat
+        run: |
+          STATUS="${{ job.status }}"
+          MESSAGE="🔔 GitHub Actions Pipeline Status: *$STATUS* 🚀\n
+          - Repository: *${{ github.repository }}*\n
+          - Branch: *${{ github.ref }}*\n
+          - Commit: *${{ github.sha }}*\n
+          - Triggered by: *${{ github.actor }}*\n
+          - [View Workflow Logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+          JSON_PAYLOAD=$(jq -n --arg text "$MESSAGE" '{text: $text}')
+          curl -X POST -H "Content-Type: application/json" -d "$JSON_PAYLOAD" https://chat.googleapis.com/v1/spaces/AAAAJD4G6BA/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=j08r854BxnJph-G8R7FHf__BTeTciV0AjS81d0qF1AM
